@@ -56,7 +56,7 @@ the main thread.
 
 Here's what a profile looks like:
 
-TODO
+<img width="1352" height="797" alt="image" src="https://github.com/user-attachments/assets/a50c9977-70e3-4e4e-8b0b-a62c1c2e6b29" />
 
 It isn't possible to load a single asset bundle repeatedly, so I only have
 a profile of loading a single one. However, we can see the texture being loaded
@@ -87,9 +87,9 @@ if (request.isHttpError || request.isNetworkError)
 var texture = DownloadHandlerTexture.GetContent(request);
 ```
 
-Here is what a profile looks like when loading 50 copies of the same png texture:
+Here is what a (partial) profile looks like when loading 50 copies of the same png texture:
 
-TODO
+<img width="1612" height="662" alt="image" src="https://github.com/user-attachments/assets/ae1fdbf6-5205-4d3a-86bc-c7d206605fac" />
 
 One caveat here is that Unity loads png textures as RGBA32. For large textures
 this could result in issues due to running out of GPU memory. One option to
@@ -97,8 +97,8 @@ avoid this would be load them onto the GPU and then use a compute shader to
 compress them to DXT1/DXT5. See this repo for an example of how to do this:
 <https://github.com/aras-p/UnityGPUTexCompression>.
 
-I am unconvinced that this is worth it. Better to just get people to use asset
-bundles where it matters.
+I am unconvinced that gpu compression is worth the effort. Better to just get people to
+use asset bundles where it matters.
 
 ## Loading DDS Textures
 Unity doesn't provide a good way to load large DDS textures efficiently. The
@@ -130,7 +130,7 @@ in that respect than the other options.
 Here's what a profile of loading 50 copies of the same DDS image texture looks
 like:
 
-TODO
+<img width="1770" height="647" alt="image" src="https://github.com/user-attachments/assets/4d109b15-fb66-4be0-8322-6c82a4e3eb1d" />
 
 ## Possible Future Options
 I think I have exhausted all the options for asynchronous loading of textures
