@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using KSP.UI.Screens;
 using UnityEngine;
@@ -157,12 +158,9 @@ internal class DebugUI : MonoBehaviour
         );
         var uri = new Uri(path);
 
-        for (int i = 0; i < 1; ++i)
-        {
-            using var sample = new Sample("LoadAssetBundle");
-            var request = UnityWebRequestAssetBundle.GetAssetBundle(uri);
-            StartCoroutine(LoadAssetBundleCoroutine(request, "Assets/Textures/Kerbin_Color.dds"));
-        }
+        using var sample = new Sample("LoadAssetBundle");
+        var request = UnityWebRequestAssetBundle.GetAssetBundle(uri);
+        StartCoroutine(LoadAssetBundleCoroutine(request, "Assets/Textures/Kerbin_Color.dds"));
     }
 
     IEnumerator LoadAssetBundleCoroutine(UnityWebRequest request, string name)
@@ -176,12 +174,25 @@ internal class DebugUI : MonoBehaviour
         }
 
         var bundle = DownloadHandlerAssetBundle.GetContent(request);
+
+        List<Coroutine> coroutines = [];
+        for (int i = 0; i < iterations; ++i)
+        {
+            coroutines.Add(StartCoroutine(LoadAssetBundleTexture(bundle, name)));
+        }
+
+        foreach (var coro in coroutines)
+            yield return coro;
+
+        bundle.Unload(false);
+    }
+
+    IEnumerator LoadAssetBundleTexture(AssetBundle bundle, string name)
+    {
         var texreq = bundle.LoadAssetAsync<Texture2D>(name);
         yield return texreq;
 
         _ = (Texture2D)texreq.asset;
-
-        bundle.Unload(false);
     }
 
     readonly struct PushGUISkin : IDisposable
